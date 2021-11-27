@@ -1,4 +1,5 @@
 # gone-nats
+<<<<<<< HEAD
 ![License: MIT](https://img.shields.io/badge/Language-Golang-blue.svg)
 ![License: MIT](https://img.shields.io/badge/Database-NATS.io-magenta.svg)
 [![Build GO workflow](https://github.com/edwinnduti/gone-nats/actions/workflows/deploy.yaml/badge.svg?branch=master)](https://github.com/edwinnduti/gone-nats/actions/workflows/deploy.yaml)
@@ -35,3 +36,6 @@ Available :
 
 
 Made by Edwin with ❤️ in Kenya.
+=======
+A code that uses the NATS.IO Message BUS/Broker from [nats.io](https://nats.io)
+>>>>>>> ee35d641ef08561762e4b98837a040630a9dc01c
