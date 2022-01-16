@@ -38,6 +38,7 @@ func (srv Server) WelcomeHandler(w http.ResponseWriter, r *http.Request) {
 		// write response
 		json.NewEncoder(w).Encode(response)
 	}
+	log.Println(string(msg.Data))
 
 	// write to rw
 	w.Write(msg.Data)

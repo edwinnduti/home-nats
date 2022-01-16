@@ -2,8 +2,8 @@ package natsConn
 
 import (
 	"log"
+	"os"
 
-	"github.com/edwinnduti/gone-nats/secrets"
 	"github.com/joho/godotenv"
 	"github.com/nats-io/nats.go"
 )
@@ -22,7 +22,7 @@ func init() {
 // ConnectNats function
 func GetNatsConnection() (*nats.Conn, error) {
 	// Connect NATS to nats.DefaultURL
-	natsconn, err := nats.Connect(secrets.Configs.NatsUrl)
+	natsconn, err := nats.Connect(os.Getenv("NATSURL"))
 	if err != nil {
 		return nil, err
 	}
