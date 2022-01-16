@@ -12,16 +12,7 @@ A REST API that uses the [NATS Message BUS/Broker](https://nats.io).
 * MySQL
 
 # Note
-- You will need to create a <b>.env</b> file with the below details and paste it in the gone-nats directory.
-- It will contain the following the data:
-    ```txt
-    NATSURL=nats://localhost:4222
-    PORT=8080
-    DBUSER=
-    DBPASS=
-    ADDR=127.0.0.1:3306
-    DBNAME=houseinfodb
-    ```
+- You will need to edit the <b>.env</b> file in the gone-nats directory with the credential details and paste it in the gone-nats directory.
 - Also start the NATS server using:
     ```bash
     $ nats-server
