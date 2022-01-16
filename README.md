@@ -47,4 +47,4 @@ Available :
 
 Happy Coding!
 
-<center>Made by Edwin with ❤️ in Kenya.</center>
+Made by Edwin with ❤️ in Kenya.
