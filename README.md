@@ -4,7 +4,7 @@
 ![License: MIT](https://img.shields.io/badge/Language-Golang-blue.svg)
 ![License: MIT](https://img.shields.io/badge/Database-NATS.io-magenta.svg)
 
-A REST API that uses the [NATS Message BUS/Broker](https://nats.io).
+A REST API that uses the [NATS Message BUS/Broker](https://nats.io) and MySQL database to persist data.
 
 ### Requirements
 * Golang 
