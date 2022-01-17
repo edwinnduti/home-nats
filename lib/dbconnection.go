@@ -2,9 +2,9 @@ package lib
 
 import (
 	"database/sql"
-	"log"
 	"os"
 
+	"github.com/edwinnduti/gone-nats/consts"
 	"github.com/go-sql-driver/mysql"
 )
 
@@ -25,7 +25,7 @@ func ConnectDB() (*sql.DB, error) {
 
 	// log db result
 	if dbPingErr := db.Ping(); dbPingErr == nil {
-		log.Println("Database connection successful!")
+		consts.InfoLogger.Println("Database connection successful!")
 	}
 
 	// return database connection and errors if present

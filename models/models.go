@@ -1,6 +1,6 @@
 package models
 
-type NewUser struct {
+type Info struct {
 	Message string `json:"message"`
 }
 

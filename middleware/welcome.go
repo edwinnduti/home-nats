@@ -7,13 +7,7 @@ import (
 	"time"
 
 	"github.com/edwinnduti/gone-nats/models"
-	"github.com/nats-io/nats.go"
 )
-
-// nats server struct
-type Server struct {
-	Nc *nats.Conn
-}
 
 // welcome message
 func (srv Server) WelcomeHandler(w http.ResponseWriter, r *http.Request) {

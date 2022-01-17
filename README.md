@@ -39,10 +39,12 @@ $ ./natsapp
 #### Paths
 Available :
 
-| function              |   path                    |   method  |
-|   ----                |   ----                    |   ----    |
-| welcome new user           |   /			|	GET    |
-| add new house to db        |   /add-house	|	POST    |
+| function                   |   path               |   method  |
+|   ----                     |   ----               |   ----    |
+| welcome new user           |   /			        |	GET     |
+| add new house to db        |   /add-house	        |	POST    |
+| get house based on id      |   /house/{house_id}	|	GET     |
+
 
 
 Happy Coding!

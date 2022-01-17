@@ -6,17 +6,23 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/nats-io/nats.go"
+
+	"github.com/edwinnduti/gone-nats/consts"
 )
 
 // init function
 func init() {
+	// START OF APPLICATION
+	consts.InfoLogger.Println("Starting the application...")
+
+	// load env file (.env by default)
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatalf("Error getting ENV values: %v\n", err)
 	}
 
-	// loaded ENV variables
-	log.Printf("Success getting the env values")
+	// log for loaded ENV variables
+	consts.InfoLogger.Println("Env Values Acquired Successfully")
 }
 
 // ConnectNats function
@@ -27,7 +33,7 @@ func GetNatsConnection() (*nats.Conn, error) {
 		return nil, err
 	}
 
-	// Check if connection is alive
-	log.Println("NATS Connection Established on :", natsconn.ConnectedUrl())
+	// log for if connection is alive
+	consts.InfoLogger.Printf("NATS Connection Established on: %v", natsconn.ConnectedUrl())
 	return natsconn, nil
 }
