@@ -1,8 +1,8 @@
 # gone-nats
 
+[![Build GO workflow](https://github.com/edwinnduti/gone-nats/actions/workflows/deploy.yaml/badge.svg?branch=master)](https://github.com/edwinnduti/gone-nats/actions/workflows/deploy.yaml)
 ![License: MIT](https://img.shields.io/badge/Language-Golang-blue.svg)
 ![License: MIT](https://img.shields.io/badge/Database-NATS.io-magenta.svg)
-[![Build GO workflow](https://github.com/edwinnduti/gone-nats/actions/workflows/deploy.yaml/badge.svg?branch=master)](https://github.com/edwinnduti/gone-nats/actions/workflows/deploy.yaml)
 
 A REST API that uses the [NATS Message BUS/Broker](https://nats.io).
 
