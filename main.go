@@ -11,12 +11,12 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/edwinnduti/gone-nats/consts"
-	"github.com/edwinnduti/gone-nats/lib"
-	"github.com/edwinnduti/gone-nats/middleware"
-	"github.com/edwinnduti/gone-nats/models"
-	"github.com/edwinnduti/gone-nats/natsConn"
-	"github.com/edwinnduti/gone-nats/router"
+	"github.com/edwinnduti/home-nats/consts"
+	"github.com/edwinnduti/home-nats/lib"
+	"github.com/edwinnduti/home-nats/middleware"
+	"github.com/edwinnduti/home-nats/models"
+	"github.com/edwinnduti/home-nats/natsConn"
+	"github.com/edwinnduti/home-nats/router"
 	"github.com/nats-io/nats.go"
 )
 

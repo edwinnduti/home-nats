@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/edwinnduti/gone-nats/models"
+	"github.com/edwinnduti/home-nats/models"
 )
 
 // welcome message

@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"os"
 
-	"github.com/edwinnduti/gone-nats/consts"
+	"github.com/edwinnduti/home-nats/consts"
 	"github.com/go-sql-driver/mysql"
 )
 

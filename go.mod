@@ -1,4 +1,4 @@
-module github.com/edwinnduti/gone-nats
+module github.com/edwinnduti/home-nats
 
 go 1.14
 

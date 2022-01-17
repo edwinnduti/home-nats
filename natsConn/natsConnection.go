@@ -7,7 +7,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/nats-io/nats.go"
 
-	"github.com/edwinnduti/gone-nats/consts"
+	"github.com/edwinnduti/home-nats/consts"
 )
 
 // init function

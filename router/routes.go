@@ -1,7 +1,7 @@
 package router
 
 import (
-	"github.com/edwinnduti/gone-nats/middleware"
+	"github.com/edwinnduti/home-nats/middleware"
 	"github.com/gorilla/mux"
 )
 

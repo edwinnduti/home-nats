@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/edwinnduti/gone-nats/consts"
-	"github.com/edwinnduti/gone-nats/models"
+	"github.com/edwinnduti/home-nats/consts"
+	"github.com/edwinnduti/home-nats/models"
 	"github.com/gorilla/mux"
 )
 
