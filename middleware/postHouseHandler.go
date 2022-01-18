@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/edwinnduti/home-nats/consts"
+	"github.com/edwinnduti/home-nats/lib"
 	"github.com/edwinnduti/home-nats/models"
 )
 
@@ -17,76 +18,26 @@ func (srv Server) PostHouseHandler(w http.ResponseWriter, r *http.Request) {
 	// get data from user
 	err := json.NewDecoder(r.Body).Decode(&house)
 	if err != nil {
-		// log error
-		consts.ErrorLogger.Printf("Posthouse Decode Error: %v", err)
-
-		// response code
-		w.WriteHeader(http.StatusOK)
-
-		// return error
-		response := models.NewResponse{
-			Code:    http.StatusInternalServerError,
-			Message: "House Creation Error",
-		}
-
-		// write response
-		json.NewEncoder(w).Encode(response)
+		lib.CheckErr(w, "Posthouse Decode Error", http.StatusInternalServerError, "House Creation Error", err)
 	}
 
 	// marshal house into bytes
 	houseInBytes, err := json.Marshal(&house)
 	if err != nil {
-		// log error
-		consts.ErrorLogger.Printf("Marshal house Error: %v", err)
-
-		// response code
-		w.WriteHeader(http.StatusOK)
-
-		// return error
-		response := models.NewResponse{
-			Code:    http.StatusInternalServerError,
-			Message: "Marshal house Error",
-		}
-
-		// write response
-		json.NewEncoder(w).Encode(response)
+		lib.CheckErr(w, "Marshal house Error", http.StatusInternalServerError, "Marshal house Error", err)
 	}
 
 	// NATS request method
 	msg, err := srv.Nc.Request("addHouse", houseInBytes, time.Second)
 	if err != nil {
-		// log error
-		consts.ErrorLogger.Printf("NATS addHouse request Error: %v", err)
-
-		// response code
-		w.WriteHeader(http.StatusOK)
-
-		// return error
-		response := models.NewResponse{
-			Code:    http.StatusInternalServerError,
-			Message: "NATS request Error",
-		}
-
-		// write response
-		json.NewEncoder(w).Encode(response)
+		lib.CheckErr(w, "NATS addHouse request Error", http.StatusInternalServerError, "NATS request Error", err)
 	}
+
+	// empty info struct
 	info := new(models.Info)
 	err = json.Unmarshal(msg.Data, &info)
 	if err != nil {
-		// log error
-		consts.ErrorLogger.Printf("NATS Unmarshal for Info.Message Error: %v", err)
-
-		// response code
-		w.WriteHeader(http.StatusOK)
-
-		// return error
-		response := models.NewResponse{
-			Code:    http.StatusInternalServerError,
-			Message: "NATS Unmarshal Error",
-		}
-
-		// write response
-		json.NewEncoder(w).Encode(response)
+		lib.CheckErr(w, "NATS Unmarshal for Info.Message Error", http.StatusInternalServerError, "NATS Unmarshal Error", err)
 	}
 
 	// create log for request performed

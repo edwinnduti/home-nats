@@ -1,7 +1,6 @@
 package natsConn
 
 import (
-	"log"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -18,7 +17,7 @@ func init() {
 	// load env file (.env by default)
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatalf("Error getting ENV values: %v\n", err)
+		consts.ErrorLogger.Printf("Error getting ENV values: %v\n", err)
 	}
 
 	// log for loaded ENV variables

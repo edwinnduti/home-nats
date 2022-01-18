@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/edwinnduti/home-nats/consts"
+	"github.com/edwinnduti/home-nats/lib"
 	"github.com/edwinnduti/home-nats/models"
 	"github.com/gorilla/mux"
 )
@@ -21,39 +22,13 @@ func (srv Server) GetHouseHandler(w http.ResponseWriter, r *http.Request) {
 	// marshal idMsg to bytes type
 	idMsgInBytes, err := json.Marshal(idMsg)
 	if err != nil {
-		// log error
-		consts.ErrorLogger.Printf("Marshal IdMsg Error: %v", err)
-
-		// response code
-		w.WriteHeader(http.StatusOK)
-
-		// return error
-		response := models.NewResponse{
-			Code:    http.StatusInternalServerError,
-			Message: "Marshal Id Error",
-		}
-
-		// write response
-		json.NewEncoder(w).Encode(response)
+		lib.CheckErr(w, "Marshal IdMsg Error", http.StatusInternalServerError, "Marshal Id Error", err)
 	}
 
 	// make nats request-reply
 	msg, err := srv.Nc.Request("getHouse", idMsgInBytes, time.Second)
 	if err != nil {
-		// log error
-		consts.ErrorLogger.Printf("NATS getHouse request Error: %v", err)
-
-		// response code
-		w.WriteHeader(http.StatusOK)
-
-		// return error
-		response := models.NewResponse{
-			Code:    http.StatusInternalServerError,
-			Message: "NATS request Error",
-		}
-
-		// write response
-		json.NewEncoder(w).Encode(response)
+		lib.CheckErr(w, "NATS getHouse request Error", http.StatusInternalServerError, "NATS request Error", err)
 	}
 
 	// create log for request performed
