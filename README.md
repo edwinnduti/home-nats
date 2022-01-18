@@ -44,6 +44,9 @@ Available :
 | welcome new user           |   /			        |	GET     |
 | add new house to db        |   /add-house	        |	POST    |
 | get house based on id      |   /house/{house_id}	|	GET     |
+| get all houses in the db   |   /houses			|	GET     |
+| update house based on id   |   /house/{house_id}	|	PUT     |
+| delete house based on id   |   /house/{house_id}	|	DELETE  |
 
 
 

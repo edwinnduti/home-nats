@@ -11,6 +11,8 @@ func Route(m middleware.Server) *mux.Router {
 	r.HandleFunc("/house/{house_id}", m.GetHouseHandler).Methods("GET", "OPTIONS")
 	r.HandleFunc("/add-house", m.PostHouseHandler).Methods("POST", "OPTIONS")
 	r.HandleFunc("/houses", m.GetAllHousesHandler).Methods("GET", "OPTIONS")
+	r.HandleFunc("/house/{house_id}", m.DeleteHouseHandler).Methods("DELETE", "OPTIONS")
+	r.HandleFunc("/house/{house_id}", m.PutHouseHandler).Methods("PUT", "OPTIONS")
 
 	return r
 

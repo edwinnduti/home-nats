@@ -36,6 +36,8 @@ func main() {
 	natsServer.PostHouseReply("addHouse")
 	natsServer.GetHouseReply("getHouse")
 	natsServer.GetAllHousesReply("getAllHouses")
+	natsServer.DeleteHouseReply("deleteHouse")
+	natsServer.PutHouseReply("putHouse")
 
 	// get router and give it the service connection
 	r := router.Route(natsServer.Server)

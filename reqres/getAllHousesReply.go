@@ -11,7 +11,7 @@ import (
 
 func (s NatsServer) GetAllHousesReply(subject string) {
 	// subscribe to nats subject getAllHouses
-	s.Server.Nc.Subscribe("getAllHouses", func(msg *nats.Msg) {
+	sub, err := s.Server.Nc.Subscribe("getAllHouses", func(msg *nats.Msg) {
 
 		//connect to database
 		db, err := lib.ConnectDB()
@@ -92,4 +92,14 @@ func (s NatsServer) GetAllHousesReply(subject string) {
 		s.Server.Nc.Publish(msg.Reply, housesInBytes)
 
 	})
+
+	// check error from subscribe
+	if err != nil {
+		lib.CheckErr(w, "Subscribe to getAllHouses Error", http.StatusInternalServerError, "Subscribe Error", err)
+	}
+
+	// unsubscribe from nats subject getAllHouses
+	if err := sub.Unsubscribe(); err != nil {
+		lib.CheckErr(w, "Cannot Unsubscribe to NATS error", http.StatusInternalServerError, "NATS Unsubscribe Error", err)
+	}
 }
