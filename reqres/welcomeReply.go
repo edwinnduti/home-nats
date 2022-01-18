@@ -11,7 +11,7 @@ import (
 
 func (s NatsServer) WelcomeReply(subject string) {
 	// subscribe to nats subject welcome
-	sub, err := s.Server.Nc.Subscribe("welcome", func(msg *nats.Msg) {
+	s.Server.Nc.Subscribe("welcome", func(msg *nats.Msg) {
 		message := models.Info{
 			Message: "Welcome to my NATS API!",
 		}
@@ -24,15 +24,5 @@ func (s NatsServer) WelcomeReply(subject string) {
 		// publish message
 		s.Server.Nc.Publish(msg.Reply, byteMsg)
 	})
-
-	// check error from subscribe
-	if err != nil {
-		lib.CheckErr(w, "Subscribe to welcome Error", http.StatusInternalServerError, "Subscribe Error", err)
-	}
-
-	// unsubscribe from nats subject welcome
-	if err := sub.Unsubscribe(); err != nil {
-		lib.CheckErr(w, "Cannot Unsubscribe to NATS error", http.StatusInternalServerError, "NATS Unsubscribe Error", err)
-	}
 
 }

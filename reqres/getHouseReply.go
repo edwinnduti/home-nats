@@ -11,7 +11,7 @@ import (
 
 func (s NatsServer) GetHouseReply(subject string) {
 	// subscribe to nats subject getHouse
-	sub, err := s.Server.Nc.Subscribe("getHouse", func(msg *nats.Msg) {
+	s.Server.Nc.Subscribe("getHouse", func(msg *nats.Msg) {
 
 		idHolder := new(models.Info)
 		if err := json.Unmarshal(msg.Data, &idHolder); err != nil {
@@ -84,13 +84,4 @@ func (s NatsServer) GetHouseReply(subject string) {
 
 	})
 
-	// check error from subscribe
-	if err != nil {
-		lib.CheckErr(w, "Subscribe to getHouse Error", http.StatusInternalServerError, "Subscribe Error", err)
-	}
-
-	// unsubscribe from nats subject getHouse
-	if err := sub.Unsubscribe(); err != nil {
-		lib.CheckErr(w, "Cannot Unsubscribe to NATS error", http.StatusInternalServerError, "NATS Unsubscribe Error", err)
-	}
 }

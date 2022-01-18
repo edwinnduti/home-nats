@@ -12,7 +12,7 @@ import (
 
 func (s NatsServer) PostHouseReply(subject string) {
 	// subscribe to nats subject add_house
-	sub, err := s.Server.Nc.Subscribe("addHouse", func(msg *nats.Msg) {
+	s.Server.Nc.Subscribe("addHouse", func(msg *nats.Msg) {
 
 		// new empty house
 		house := new(models.House)
@@ -70,15 +70,5 @@ func (s NatsServer) PostHouseReply(subject string) {
 		s.Server.Nc.Publish(msg.Reply, resInBytes)
 
 	})
-
-	// check error from subscribe
-	if err != nil {
-		lib.CheckErr(w, "Subscribe to postHouse Error", http.StatusInternalServerError, "Subscribe Error", err)
-	}
-
-	// unsubscribe from nats subject postHouse
-	if err := sub.Unsubscribe(); err != nil {
-		lib.CheckErr(w, "Cannot Unsubscribe to NATS error", http.StatusInternalServerError, "NATS Unsubscribe Error", err)
-	}
 
 }

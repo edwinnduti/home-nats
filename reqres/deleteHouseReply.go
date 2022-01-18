@@ -12,7 +12,7 @@ import (
 
 func (s NatsServer) DeleteHouseReply(subject string) {
 	// subscribe to nats subject getHouse
-	sub, err := s.Server.Nc.Subscribe("deleteHouse", func(msg *nats.Msg) {
+	s.Server.Nc.Subscribe("deleteHouse", func(msg *nats.Msg) {
 
 		idHolder := new(models.Info)
 		if err := json.Unmarshal(msg.Data, &idHolder); err != nil {
@@ -55,13 +55,4 @@ func (s NatsServer) DeleteHouseReply(subject string) {
 
 	})
 
-	// check error from subscribe
-	if err != nil {
-		lib.CheckErr(w, "Subscribe to deleteHouse Error", http.StatusInternalServerError, "Subscribe Error", err)
-	}
-
-	// unsubscribe from nats subject deleteHouse
-	if err := sub.Unsubscribe(); err != nil {
-		lib.CheckErr(w, "Cannot Unsubscribe to NATS error", http.StatusInternalServerError, "NATS Unsubscribe Error", err)
-	}
 }
