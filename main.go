@@ -7,7 +7,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 
@@ -34,7 +33,7 @@ func main() {
 	server.Nc, err = natsConn.GetNatsConnection()
 	if err != nil {
 		// log error
-		log.Printf("NATS not Connecting error: %v", err)
+		consts.ErrorLogger.Printf("NATS not Connecting error: %v", err)
 
 		// return error
 		response := models.NewResponse{
@@ -56,7 +55,7 @@ func main() {
 		byteMsg, err := json.Marshal(message)
 		if err != nil {
 			// log error
-			log.Printf("Marshal error: %v", err)
+			consts.ErrorLogger.Printf("Marshal error: %v", err)
 
 			// return error
 			response := models.NewResponse{
@@ -86,7 +85,7 @@ func main() {
 		err := json.Unmarshal(msg.Data, &house)
 		if err != nil {
 			// log error
-			log.Printf("Marshal error: %v", err)
+			consts.ErrorLogger.Printf("Marshal error: %v", err)
 
 			// return error
 			response := models.NewResponse{
@@ -111,7 +110,7 @@ func main() {
 		db, err := lib.ConnectDB()
 		if err != nil {
 			// log error
-			log.Printf("DB connection Error: %v", err)
+			consts.ErrorLogger.Printf("DB connection Error: %v", err)
 
 			// response code
 			w.WriteHeader(http.StatusOK)
@@ -133,7 +132,7 @@ func main() {
 		result, err := db.Exec("INSERT INTO house (house_number, name, location, cost, year_of_construction, category, area, perimeter, number_of_floors, number_of_bedrooms, construction_material, roofing_type, fencing_type, parking_lot, source_of_water_supply, has_wifi) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", house.HouseNumber, house.Name, house.Location, house.Cost, house.YearOfConstruction, house.Category, house.Area, house.Perimeter, house.NumberOfFloors, house.NumberOfBedrooms, house.ConstructionMaterial, house.RoofingType, house.FenceType, parkingLot, house.SourceOfWaterSupply, hasWifi)
 		if err != nil {
 			// log error
-			log.Printf("House Insertion Error: %v", err)
+			consts.ErrorLogger.Printf("House Insertion Error: %v", err)
 
 			// response code
 			w.WriteHeader(http.StatusOK)
@@ -152,7 +151,7 @@ func main() {
 		id, err := result.LastInsertId()
 		if err != nil {
 			// log error
-			log.Printf("Last Id Retrival Error: %v", err)
+			consts.ErrorLogger.Printf("Last Id Retrival Error: %v", err)
 
 			// response code
 			w.WriteHeader(http.StatusOK)
@@ -178,7 +177,7 @@ func main() {
 		resInBytes, err := json.Marshal(res)
 		if err != nil {
 			// log error
-			log.Printf("Marshal error: %v", err)
+			consts.ErrorLogger.Printf("Marshal error: %v", err)
 
 			// return error
 			response := models.NewResponse{
@@ -203,7 +202,7 @@ func main() {
 		err := json.Unmarshal(msg.Data, &idHolder)
 		if err != nil {
 			// log error
-			log.Printf("Marshal error: %v", err)
+			consts.ErrorLogger.Printf("Marshal error: %v", err)
 
 			// return error
 			response := models.NewResponse{
@@ -220,7 +219,7 @@ func main() {
 		db, err := lib.ConnectDB()
 		if err != nil {
 			// log error
-			log.Printf("DB connection Error: %v", err)
+			consts.ErrorLogger.Printf("DB connection Error: %v", err)
 
 			// response code
 			w.WriteHeader(http.StatusOK)
@@ -269,7 +268,7 @@ func main() {
 		)
 		if err != nil {
 			// log error
-			log.Printf("Row Scan Error: %v", err)
+			consts.ErrorLogger.Printf("Row Scan Error: %v", err)
 
 			// response code
 			w.WriteHeader(http.StatusOK)
@@ -302,7 +301,7 @@ func main() {
 		houseInBytes, err := json.Marshal(house)
 		if err != nil {
 			// log error
-			log.Printf("Marshal House error: %v", err)
+			consts.ErrorLogger.Printf("Marshal House error: %v", err)
 
 			// return error
 			response := models.NewResponse{
@@ -317,6 +316,134 @@ func main() {
 
 		// publish message
 		server.Nc.Publish(msg.Reply, houseInBytes)
+
+	})
+
+	// subscribe to nats subject getAllHouses
+	server.Nc.Subscribe("getAllHouses", func(msg *nats.Msg) {
+
+		//connect to database
+		db, err := lib.ConnectDB()
+		if err != nil {
+			// log error
+			consts.ErrorLogger.Printf("DB connection Error: %v", err)
+
+			// response code
+			w.WriteHeader(http.StatusOK)
+
+			// return error
+			response := models.NewResponse{
+				Code:    http.StatusInternalServerError,
+				Message: "DB Connection Error",
+			}
+
+			// write response
+			json.NewEncoder(w).Encode(response)
+		}
+
+		// close db connection
+		defer db.Close()
+
+		// // An houses slice to hold data from returned rows.
+		var houses []models.House
+
+		// int holders
+		var hasWifi, hasParkingLot int
+
+		// query db using db
+		rows, err := db.Query("SELECT * FROM house")
+		if err != nil {
+			// log error
+			consts.ErrorLogger.Printf("Query All houses error: %v", err)
+
+			// return error
+			response := models.NewResponse{
+				Code:    http.StatusInternalServerError,
+				Message: "DB Query Error",
+			}
+			//response code
+			w.WriteHeader(http.StatusOK)
+			// send response
+			json.NewEncoder(w).Encode(response)
+		}
+		defer rows.Close()
+
+		// unmarshal row data to house struct
+		for rows.Next() {
+			var house models.House
+
+			if err = rows.Scan(
+				&house.Id,
+				&house.HouseNumber,
+				&house.Name,
+				&house.Location,
+				&house.Cost,
+				&house.YearOfConstruction,
+				&house.Category,
+				&house.Area,
+				&house.Perimeter,
+				&house.NumberOfFloors,
+				&house.NumberOfBedrooms,
+				&house.ConstructionMaterial,
+				&house.RoofingType,
+				&house.FenceType,
+				&hasParkingLot,
+				&house.SourceOfWaterSupply,
+				&hasWifi,
+			); err != nil {
+				// log error
+				consts.ErrorLogger.Printf("Row Scan Error: %v", err)
+
+				// response code
+				w.WriteHeader(http.StatusOK)
+
+				// return error
+				response := models.NewResponse{
+					Code:    http.StatusInternalServerError,
+					Message: "Row Scan Error",
+				}
+
+				// write response
+				json.NewEncoder(w).Encode(response)
+			}
+
+			// convert ints to boolean for user in haswifi
+			if hasWifi == 0 {
+				house.HasWifi = false
+			} else {
+				house.HasWifi = true
+			}
+
+			// convert ints to boolean for user in parking lot
+			if hasParkingLot == 0 {
+				house.ParkingLot = false
+			} else {
+				house.ParkingLot = true
+			}
+
+			// append house to houses slice
+			houses = append(houses, house)
+		}
+
+		// convert houses slice type to byte data
+		housesInBytes, err := json.Marshal(houses)
+		if err != nil {
+			// log error
+			consts.ErrorLogger.Printf("Marshal Houses error: %v", err)
+
+			// return error
+			response := models.NewResponse{
+				Code:    http.StatusInternalServerError,
+				Message: "Json Marshal Error",
+			}
+			//response code
+			w.WriteHeader(http.StatusOK)
+			// send response
+			json.NewEncoder(w).Encode(response)
+		}
+
+		// publish message
+		server.Nc.Publish(msg.Reply, housesInBytes)
 
 	})
 

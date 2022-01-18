@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 	"time"
 
@@ -19,7 +18,7 @@ func (srv Server) PostHouseHandler(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&house)
 	if err != nil {
 		// log error
-		log.Printf("Posthouse Decode Error: %v", err)
+		consts.ErrorLogger.Printf("Posthouse Decode Error: %v", err)
 
 		// response code
 		w.WriteHeader(http.StatusOK)
@@ -38,7 +37,7 @@ func (srv Server) PostHouseHandler(w http.ResponseWriter, r *http.Request) {
 	houseInBytes, err := json.Marshal(&house)
 	if err != nil {
 		// log error
-		log.Printf("Marshal house Error: %v", err)
+		consts.ErrorLogger.Printf("Marshal house Error: %v", err)
 
 		// response code
 		w.WriteHeader(http.StatusOK)
@@ -57,7 +56,7 @@ func (srv Server) PostHouseHandler(w http.ResponseWriter, r *http.Request) {
 	msg, err := srv.Nc.Request("addHouse", houseInBytes, time.Second)
 	if err != nil {
 		// log error
-		log.Printf("NATS addHouse request Error: %v", err)
+		consts.ErrorLogger.Printf("NATS addHouse request Error: %v", err)
 
 		// response code
 		w.WriteHeader(http.StatusOK)
@@ -75,7 +74,7 @@ func (srv Server) PostHouseHandler(w http.ResponseWriter, r *http.Request) {
 	err = json.Unmarshal(msg.Data, &info)
 	if err != nil {
 		// log error
-		log.Printf("NATS Unmarshal for Info.Message Error: %v", err)
+		consts.ErrorLogger.Printf("NATS Unmarshal for Info.Message Error: %v", err)
 
 		// response code
 		w.WriteHeader(http.StatusOK)

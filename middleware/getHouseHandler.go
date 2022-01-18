@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 	"time"
 
@@ -23,7 +22,7 @@ func (srv Server) GetHouseHandler(w http.ResponseWriter, r *http.Request) {
 	idMsgInBytes, err := json.Marshal(idMsg)
 	if err != nil {
 		// log error
-		log.Printf("Marshal IdMsg Error: %v", err)
+		consts.ErrorLogger.Printf("Marshal IdMsg Error: %v", err)
 
 		// response code
 		w.WriteHeader(http.StatusOK)
@@ -42,7 +41,7 @@ func (srv Server) GetHouseHandler(w http.ResponseWriter, r *http.Request) {
 	msg, err := srv.Nc.Request("getHouse", idMsgInBytes, time.Second)
 	if err != nil {
 		// log error
-		log.Printf("NATS getHouse request Error: %v", err)
+		consts.ErrorLogger.Printf("NATS getHouse request Error: %v", err)
 
 		// response code
 		w.WriteHeader(http.StatusOK)
