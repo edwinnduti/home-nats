@@ -22,4 +22,3 @@ services:
       - nats
     ports:
       - "8080:8080"
-
