@@ -5,6 +5,7 @@
 ![License: MIT](https://img.shields.io/badge/Database-NATS.io-magenta.svg)
 
 A REST API that uses the [NATS Message BUS/Broker](https://nats.io) and MySQL database to persist data.
+The repo utilizes the NATS Request-Reply pattern to send and respond to those subjects effectively.
 
 ### Requirements
 * Golang 
