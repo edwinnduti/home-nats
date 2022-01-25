@@ -1,24 +1,47 @@
-version: '3'
+version: "3.5"
 
 services:
+  mysql-db:
+    image: mysql:8.0.17
+    environment:
+      MYSQL_ROOT_PASSWORD: ""
+      MYSQL_DATABASE: houseinfodb
+    ports:
+      - "3308:3306"
+    networks:
+      - my-network
+
   nats:
     image: "nats:2.1.6"
-    expose:
-      - "4222"
+    container_name: nats-server
     ports:
-      - "8222:8222"
+      - 4222:4222
+      - 6222:6222
+      - 8222:8222
     hostname: nats-server
-
+    restart: unless-stopped
+    networks:
+      - my-network
 
   api:
     build:
-      context: "."
-    entrypoint: ./app/natsApp
+      context: .
+      dockerfile: Dockerfile
     links:
       - nats
     environment:
-      - "NATS_URI=nats://nats:4222"
+      - "NATSURL=nats://nats:4222"
+      - "DBUSER=edwin"
+      - "ADDR=127.0.0.1:3306"
+      - "DBNAME=houseinfodb"
     depends_on:
       - nats
     ports:
       - "8080:8080"
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    driver: bridge
+    external: true
